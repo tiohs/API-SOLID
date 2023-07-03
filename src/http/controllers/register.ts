@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
-import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
+import { RegisterCasoUse } from '@/use-case/register'
 
 export const registerController = async (
   request: FastifyRequest,
@@ -9,15 +9,18 @@ export const registerController = async (
   const registerBodySchema = z.object({
     name: z.string(),
     email: z.string().email(),
-    password_hash: z.string().min(6),
+    password: z.string().min(6),
   })
 
-  const { name, email, password_hash } = registerBodySchema.parse(request.body) // Ele da um throw automático
-  await prisma.user.create({
-    data: {
-      email,
+  const { name, email, password } = registerBodySchema.parse(request.body) // Ele da um throw automático
+  try {
+    await RegisterCasoUse({
       name,
-      password_hash,
-    },
-  })
+      email,
+      password,
+    })
+  } catch (error) {
+    reply.status(409).send()
+  }
+  return reply.status(201).send()
 }
