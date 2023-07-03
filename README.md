@@ -25,3 +25,12 @@ GynPass style app .
 - [ ] Os dados da aplicação precisam estar persistidos em um banco PostgreSQL;
 - [ ] Todas listas de dados precisam estar paginadas com 20 itens por página;
 - [ ] O usuário deve ser identificado por um JWT (JSON Web Token);
+
+## Documentation
+
+### Prisma
+
+Create migrate com client - ele gera uma migration
+```
+  yarn prisma migrate dev
+```
